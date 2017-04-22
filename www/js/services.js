@@ -8,6 +8,12 @@ angular.module('starter.services')
 			}
 			return [];
 		},
+        call: function() {
+            var ctaskString = window.localStorage['ctasks'];
+            if(ctaskString){
+                return angular.fromJson(ctaskString);
+            }
+         },
 		save: function(task) {
 			var tasks = [];
 			var taskString = window.localStorage['tasks'];
@@ -18,21 +24,29 @@ angular.module('starter.services')
 			window.localStorage['tasks'] = angular.toJson(tasks);
 		},
 		complete: function(task) {
-			var tasks = [];
-			var ftasks = [];
-			var taskString = window.localStroage['tasks'];
-			var ftaskString = window.localStroage['ftasks'];
-			if(tasktring) {
+            //console.log(task);
+            var tasks = [];
+			var taskString = window.localStorage['tasks'];
+			if(taskString) {
 				tasks = angular.fromJson(taskString);
 			}
-			if(ftasktring) {
-				ftasks = angular.fromJson(ftaskString);
+            var ctasks = [];
+            var ctaskString = window.localStorage['ctasks'];
+                if(ctaskString) {
+            ctasks = angular.fromJson(ctaskString);
+            }
+			for(var i = 0; i < tasks.length; i++){
+                //console.log(tasks.length);
+                if(tasks[i].title == task.title){
+                    //console.log(task.title);
+                    tasks.splice(i, 1);
+                    //console.log(tasks.length);
+                ctasks.push(task);
+                }
 			}
-			ftasks.push(task);
-			for(i=0; i<task.length; i++)
-				if(tasks[i] == task) task.splice(i, 1);
-			window.localStorage['tasks'] = angular.toJson(tasks);
-			window.localStorage['ftasks'] = angular.toJson(ftasks);
+            window.localStorage['tasks'] = angular.toJson(tasks);
+            window.localStorage['ctasks'] = angular.toJson(ctasks);
+            window.location.reload();
 		}
 	}
 })
